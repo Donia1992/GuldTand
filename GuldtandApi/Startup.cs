@@ -23,6 +23,7 @@ namespace GuldtandApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DataContext>(options => options.UseSqlServer("Data Source=.;Initial Catalog=Guldtand;Integrated Security=True", b => b.MigrationsAssembly("GuldtandApi")));
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<IEmployeeService, EmployeeService>();
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

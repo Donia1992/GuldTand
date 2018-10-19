@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Guldtand.Domain.Models
+﻿namespace Guldtand.Domain.Models
 {
     public abstract class Employee : IEmployee
     {

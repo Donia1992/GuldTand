@@ -2,17 +2,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Guldtand.Domain.Repositories
 {
     public class EmployeeRepository : IEmployeeRepository
     {
-        public List<IEmployee> GetAllEmployees()
+        public async Task<List<IEmployee>> GetAllEmployeesAsync()
         {
             using (var db = new Db())
             {
-                var employees = db.Employees.ToList();
-                return employees;
+                return await Task.Run(() => db.Employees.ToList());
             }
         }
     }

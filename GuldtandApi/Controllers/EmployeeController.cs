@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Guldtand.Domain.Repositories;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace GuldtandApi.Controllers
 {
@@ -18,11 +19,11 @@ namespace GuldtandApi.Controllers
 
         [HttpGet]
         [Route("")]
-        public IActionResult GetAllEmployees()
+        public async Task<IActionResult> GetAllEmployeesAsync()
         {
             try
             {
-                var employeeList = _employeeRepository.GetAllEmployees();
+                var employeeList = await _employeeRepository.GetAllEmployeesAsync();
                 return Ok(employeeList);
             }
             catch (ArgumentException exception)

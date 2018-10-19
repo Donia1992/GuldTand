@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Guldtand.Domain.Models;
 
 namespace Guldtand.Domain.Repositories
 {
     public interface IEmployeeRepository
     {
-        List<IEmployee> GetAllEmployees();
+        Task<List<IEmployee>> GetAllEmployeesAsync();
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
-using Guldtand.Domain.Repositories;
+using Guldtand.Domain.Services;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -10,11 +10,11 @@ namespace GuldtandApi.Controllers
     [ApiController]
     public class EmployeeController : ControllerBase
     {
-        private readonly IEmployeeRepository _employeeRepository;
+        private readonly IEmployeeService _employeeService;
 
-        public EmployeeController(IEmployeeRepository employeeRepository)
+        public EmployeeController(IEmployeeService employeeService)
         {
-            _employeeRepository = employeeRepository;
+            _employeeService = employeeService;
         }
 
         [HttpGet]
@@ -23,7 +23,7 @@ namespace GuldtandApi.Controllers
         {
             try
             {
-                var employeeList = await _employeeRepository.GetAllEmployeesAsync();
+                var employeeList = await _employeeService.GetAllEmployeesAsync();
                 return Ok(employeeList);
             }
             catch (ArgumentException exception)

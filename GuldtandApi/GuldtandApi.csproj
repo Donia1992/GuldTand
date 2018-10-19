@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Guldtand.Data\Guldtand.Data.csproj" />
     <ProjectReference Include="..\Guldtand.Domain\Guldtand.Domain.csproj" />
   </ItemGroup>
 

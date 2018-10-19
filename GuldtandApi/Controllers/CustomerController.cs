@@ -1,8 +1,7 @@
-﻿using System;
-using System.Net;
-using System.Threading.Tasks;
+using System;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using Guldtand.Domain.Repositories;
+using System.Net;
 
 namespace GuldtandApi.Controllers
 {
@@ -10,26 +9,36 @@ namespace GuldtandApi.Controllers
     [ApiController]
     public class CustomerController : ControllerBase
     {
-        private readonly ILogger<CustomerController> _logger;
+        private readonly ICustomerRepository _customerRepository;
 
-        public CustomerController(ILogger<CustomerController> logger)
+        public CustomerController(ICustomerRepository customerRepository)
         {
-            _logger = logger;
+            _customerRepository = customerRepository;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetCustomers()
+        [Route("")]
+        public IActionResult GetAllCustomers()
         {
             try
             {
-                var response = string.Empty;
+                var customerList = _customerRepository.GetAllCustomers();
+                return Ok(customerList);
+            }
+            catch (ArgumentException exception)
+            {
+                Console.WriteLine($"{DateTime.Now:yyyy-MM-dd HH:mm:ss}: " + $"ArgumentException details: {exception.Message}");
 
-                return await Task.Run(() => Ok(response));
+                return StatusCode((int)HttpStatusCode.BadRequest);
             }
             catch (Exception exception)
             {
-                _logger.LogError($"Unknown error in {nameof(CustomerController)}, details: {exception.Message}");
-                return await Task.Run(() => StatusCode((int)HttpStatusCode.InternalServerError, "An unknown error occurred"));
+                Console.WriteLine($"{DateTime.Now:yyyy-MM-dd HH:mm:ss}: " + $"Exception details: {exception.Message}");
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+            finally
+            {
+                Console.WriteLine();
             }
         }
     }

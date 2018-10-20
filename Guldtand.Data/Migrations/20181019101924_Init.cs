@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace GuldtandApi.Migrations
+namespace Guldtand.Data.Migrations
 {
     public partial class Init : Migration
     {

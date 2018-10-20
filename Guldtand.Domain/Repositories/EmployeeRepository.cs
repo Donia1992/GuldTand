@@ -21,9 +21,9 @@ namespace Guldtand.Domain.Repositories
     {
         public List<IEmployee> Employees => new List<IEmployee>
         {
-            new Dentist { Uid = 0001, Password = "password", Name = "Russell Collins" },
-            new Dentist { Uid = 0002, Password = "qwerty", Name = "Samantha Jensen" },
-            new Administrator { Uid = 0003, Password = "admin", Name = "Ashley Scott" }
+            //new Dentist { Uid = 0001, Password = "password", Name = "Russell Collins" },
+            //new Dentist { Uid = 0002, Password = "qwerty", Name = "Samantha Jensen" },
+            //new Administrator { Uid = 0003, Password = "admin", Name = "Ashley Scott" }
         };
 
         public void Dispose()

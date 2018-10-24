@@ -38,7 +38,6 @@ namespace Guldtand.Data
     public class Role
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int RoleId { get; set; }
 
         [Required]

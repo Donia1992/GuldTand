@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Guldtand.Domain.Services;
 using System.Net;
 using System.Threading.Tasks;
-using GuldtandApi.Models;
 
 namespace GuldtandApi.Controllers
 {

@@ -1,6 +1,7 @@
 ﻿using Guldtand.Domain.Repositories;
 using Guldtand.Domain.Services;
 using Guldtand.Data;
+using Guldtand.Domain;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +26,10 @@ namespace GuldtandApi
             services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("AzureGuldtand"), x => x.MigrationsAssembly("Guldtand.Data")));
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<IEmployeeService, EmployeeService>();
+            services.AddScoped<IBlobService, BlobService>();
+            services.AddScoped<IBlobRepository, BlobRepository>();
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            services.Configure<BlobSettings>(Configuration.GetSection("BlobSettings"));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 

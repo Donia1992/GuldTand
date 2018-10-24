@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Guldtand.Data": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "guldtand"
+      }
+    }
+  }
+}

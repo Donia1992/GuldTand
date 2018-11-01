@@ -1,6 +1,6 @@
 ﻿namespace Guldtand.Domain.Models.DTOs
 {
-    public interface IXrayBlobDTO
+    public interface IBlobDTO
     {
     }
 }

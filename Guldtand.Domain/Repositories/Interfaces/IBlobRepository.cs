@@ -1,10 +1,14 @@
-﻿using System.IO;
+﻿using Microsoft.WindowsAzure.Storage.Blob;
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Guldtand.Domain.Repositories
 {
     public interface IBlobRepository
     {
-        Task<string> UploadImageAsBlobAsync(Stream stream, string filename);
+        Task<ValueTuple<string, string>> UploadImageAsBlobAsync(Stream stream, string filename);
+        Task<List<ValueTuple<string, string>>> GetAllBlobsForOneCustomerAsync(string customerId);
     }
 }

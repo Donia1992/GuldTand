@@ -53,5 +53,16 @@ namespace GuldtandApi.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, exception.Message);
             }
         }
+
+        [HttpPost]
+        [Route("{id}")]
+        public async Task<IActionResult> PostBlobToCustomerFolderAsync([FromForm] IFormFile file, string id)
+        {
+            var stream = file.OpenReadStream();
+            var name = file.FileName;
+
+            var result = await _blobService.UploadBlobToCustomerDirectoryAsync(stream, name, id);
+            return (Ok(result));
+        }
     }
 }

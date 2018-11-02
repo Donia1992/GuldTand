@@ -18,12 +18,18 @@ namespace Guldtand.Domain.Repositories
             _configuration = configuration;
         }
 
-        public async Task<ValueTuple<string, string>> UploadImageAsBlobAsync(Stream stream, string filename)
+        public CloudBlobContainer GetContainer()
         {
             StorageCredentials storageCredentials = new StorageCredentials(_configuration.Value.GuldName, _configuration.Value.GuldKey);
             CloudStorageAccount storageAccount = new CloudStorageAccount(storageCredentials, useHttps: true);
             CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
             CloudBlobContainer container = blobClient.GetContainerReference("xrays");
+            return container;
+        }
+
+        public async Task<ValueTuple<string, string>> UploadImageAsBlobAsync(Stream stream, string filename)
+        {
+            CloudBlobContainer container = GetContainer();
             CloudBlockBlob blockBlob = container.GetBlockBlobReference(filename);
 
             await blockBlob.UploadFromStreamAsync(stream);
@@ -37,10 +43,7 @@ namespace Guldtand.Domain.Repositories
 
         public async Task<List<ValueTuple<string, string>>> GetAllBlobsForOneCustomerAsync(string customerId)
         {
-            StorageCredentials storageCredentials = new StorageCredentials(_configuration.Value.GuldName, _configuration.Value.GuldKey);
-            CloudStorageAccount storageAccount = new CloudStorageAccount (storageCredentials, useHttps: true);
-            CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
-            CloudBlobContainer container = blobClient.GetContainerReference("xrays");
+            CloudBlobContainer container = GetContainer();
             CloudBlobDirectory directory = container.GetDirectoryReference($"{customerId}");
 
             var list = new List<ValueTuple<string, string>>();
@@ -61,6 +64,21 @@ namespace Guldtand.Domain.Repositories
             } while (token != null);
 
             return list;
+        }
+
+        public async Task<ValueTuple<string, string>> UploadBlobToCustomerFolderAsync(Stream stream, string filename, string customerId)
+        {
+            CloudBlobContainer container = GetContainer();
+            CloudBlobDirectory directory = container.GetDirectoryReference($"{customerId}");
+
+            CloudBlockBlob blockBlob = directory.GetBlockBlobReference(filename);
+
+            await blockBlob.UploadFromStreamAsync(stream);
+            stream.Dispose();
+
+            (string Name, string Url) blobInfo = new ValueTuple<string, string>(blockBlob.Name, blockBlob.Uri.ToString());
+
+            return blobInfo;
         }
     }
 }

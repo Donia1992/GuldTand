@@ -35,5 +35,13 @@ namespace Guldtand.Domain.Services
             }
             return blobList;
         }
+
+        public async Task<BlobDTO> UploadBlobToCustomerDirectoryAsync(Stream stream, string fileName, string customerId)
+        {
+            var blobInfo = await _blobRepository.UploadBlobToCustomerFolderAsync(stream, fileName, customerId);
+            var blobDTO = new BlobDTO(blobInfo.Item1, blobInfo.Item2);
+
+            return blobDTO;
+        }
     }
 }

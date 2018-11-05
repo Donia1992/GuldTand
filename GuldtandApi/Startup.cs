@@ -30,6 +30,7 @@ namespace GuldtandApi
             services.AddScoped<IBlobRepository, BlobRepository>();
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.Configure<BlobSettings>(Configuration.GetSection("BlobSettings"));
+            services.AddCors();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
@@ -44,6 +45,13 @@ namespace GuldtandApi
             {
                 app.UseHsts();
             }
+
+            app.UseCors(builder =>
+                builder
+                .AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+             );
 
             app.UseHttpsRedirection();
             app.UseMvc();

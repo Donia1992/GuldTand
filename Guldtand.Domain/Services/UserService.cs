@@ -5,6 +5,8 @@ using System.Text;
 using Guldtand.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace Guldtand.Domain.Services
 {
@@ -22,7 +24,7 @@ namespace Guldtand.Domain.Services
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
                 return null;
 
-            var user = _context.Users.SingleOrDefault(x => x.Username == username);
+            var user = _context.Users.Include("Role").SingleOrDefault(x => x.Username == username);
 
             if (user == null)
                 return null;
@@ -51,6 +53,17 @@ namespace Guldtand.Domain.Services
 
             return user;
         }
+
+        public User GetById(int id)
+        {
+            return _context.Users.Find(id);
+        }
+
+        public IEnumerable<User> GetAll()
+        {
+            return _context.Users;
+        }
+
 
         private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {

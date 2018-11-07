@@ -13,24 +13,26 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using Guldtand.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace GuldtandApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class UsersController : ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
         private readonly AppSettings _appSettings;
-        private readonly ILogger<UsersController> _logger;
+        private readonly ILogger<UserController> _logger;
 
-        public UsersController(
+        public UserController(
             IUserService userService,
             IMapper mapper,
             IOptions<AppSettings> appSettings,
-            ILogger<UsersController> logger)
+            ILogger<UserController> logger)
         {
             _userService = userService;
             _mapper = mapper;
@@ -38,9 +40,9 @@ namespace GuldtandApi.Controllers
             _logger = logger;
         }
 
-        [AllowAnonymous]
         [HttpPost]
         [Route("auth")]
+        [AllowAnonymous]
         public async Task<IActionResult> Authenticate([FromBody]UserDTO userDto)
         {
             var user = await _userService.Authenticate(userDto.Username, userDto.Password);
@@ -54,7 +56,9 @@ namespace GuldtandApi.Controllers
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, user.Username.ToString())
+                    new Claim(ClaimTypes.Name, user.Id.ToString()),
+                    new Claim(ClaimTypes.NameIdentifier, user.Username),
+                    new Claim(ClaimTypes.Role, user.Role.RoleName)
                 }),
                 Expires = DateTime.UtcNow.AddDays(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
@@ -64,17 +68,18 @@ namespace GuldtandApi.Controllers
 
             return Ok(new
             {
-                user.Id,
                 user.Username,
+                user.Role.RoleName,
                 user.FirstName,
                 user.LastName,
                 Token = tokenString
             });
         }
 
-        [AllowAnonymous]
+
         [HttpPost]
         [Route("reg")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Register([FromBody]UserDTO userDto)
         {
             var user = _mapper.Map<User>(userDto);
@@ -88,6 +93,14 @@ namespace GuldtandApi.Controllers
             {
                 return BadRequest(new { message = ex.Message });
             }
+        }
+
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            var users = _userService.GetAll();
+            var userDtos = _mapper.Map<IList<UserDTO>>(users);
+            return Ok(userDtos);
         }
 
     }

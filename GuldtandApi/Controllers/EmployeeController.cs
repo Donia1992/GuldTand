@@ -24,7 +24,6 @@ namespace GuldtandApi.Controllers
             try
             {
                 var employeeList = await _employeeService.GetAllEmployeesAsync();
-                //var employeeListModel = new EmployeeListModel(employeeList);
 
                 return Ok(employeeList);
             }

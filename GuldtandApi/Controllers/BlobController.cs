@@ -21,32 +21,14 @@ namespace GuldtandApi.Controllers
             _blobService = blobService;
         }
 
-        [HttpPost]
-        [Route("")]
-        public async Task<IActionResult> PostBlobAsync([FromForm] IFormFile file)
-        {
-            var stream = file.OpenReadStream();
-            var name = file.FileName;
-
-            var result = await _blobService.UploadBlobAsync(stream, name);
-            return (Ok(result));
-        }
-
         [HttpGet]
         [Route("{id}")]
         public async Task<IActionResult> GetAllBlobsForOneCustomerAsync(string id)
         {
             try
             {
-                if (id == null)
-                    throw new ArgumentNullException($"Parameter {nameof(id)} cannot be null");
-
                 var result = await _blobService.GetAllBlobsForOneCustomerAsync(id);
                 return (Ok(result));
-            }
-            catch (ArgumentNullException argumentNullException)
-            {
-                return StatusCode((int)HttpStatusCode.BadRequest, argumentNullException.Message);
             }
             catch (Exception exception)
             {
@@ -58,11 +40,25 @@ namespace GuldtandApi.Controllers
         [Route("{id}")]
         public async Task<IActionResult> PostBlobToCustomerFolderAsync([FromForm] IFormFile file, string id)
         {
-            var stream = file.OpenReadStream();
-            var name = file.FileName;
+            try
+            {
+                if (file == null)
+                    throw new ArgumentNullException($"Parameter {nameof(file)} cannot be null");
 
-            var result = await _blobService.UploadBlobToCustomerDirectoryAsync(stream, name, id);
-            return (Ok(result));
+                var stream = file.OpenReadStream();
+                var name = file.FileName;
+
+                var result = await _blobService.UploadBlobToCustomerDirectoryAsync(stream, name, id);
+                return (Ok(result));
+            }
+            catch (ArgumentNullException exception)
+            {
+                return StatusCode((int) HttpStatusCode.BadRequest, exception.Message);
+            }
+            catch (Exception exception)
+            {
+                return StatusCode((int) HttpStatusCode.InternalServerError, exception.Message);
+            }
         }
     }
 }

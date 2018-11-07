@@ -8,7 +8,6 @@ namespace Guldtand.Domain.Repositories
 {
     public interface IBlobRepository
     {
-        Task<ValueTuple<string, string>> UploadImageAsBlobAsync(Stream stream, string filename);
         Task<List<ValueTuple<string, string>>> GetAllBlobsForOneCustomerAsync(string customerId);
         Task<ValueTuple<string, string>> UploadBlobToCustomerFolderAsync(Stream stream, string fileName, string customerId);
     }

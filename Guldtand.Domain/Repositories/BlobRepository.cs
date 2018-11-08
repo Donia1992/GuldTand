@@ -17,17 +17,7 @@ namespace Guldtand.Domain.Repositories
             _configuration = configuration;
         }
 
-        public CloudBlobContainer GetContainer()
-        {
-            StorageCredentials storageCredentials = new StorageCredentials(_configuration.Value.GuldName, _configuration.Value.GuldKey);
-            CloudStorageAccount storageAccount = new CloudStorageAccount(storageCredentials, useHttps: true);
-            CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
-            CloudBlobContainer container = blobClient.GetContainerReference("xrays");
-
-            return container;
-        }
-
-        public async Task<List<ValueTuple<string, string>>> GetAllBlobsForOneCustomerAsync(string customerId)
+        public async Task<List<(string, string)>> GetAllBlobsForOneCustomerAsync(string customerId)
         {
             CloudBlobContainer container = GetContainer();
             CloudBlobDirectory directory = container.GetDirectoryReference($"{customerId}");
@@ -46,7 +36,7 @@ namespace Guldtand.Domain.Repositories
                     await blob.FetchAttributesAsync();
 
                     blobTupleList.Add( 
-                        new ValueTuple<string, string>(blob.Name.ToString().Substring(blob.Name.ToString().IndexOf("/") + 1), item.Uri.ToString()));
+                        (blob.Name.ToString().Substring(blob.Name.ToString().IndexOf("/") + 1), item.Uri.ToString()));
                 }
             } while (token != null);
 
@@ -62,9 +52,19 @@ namespace Guldtand.Domain.Repositories
             await blockBlob.UploadFromStreamAsync(stream);
             stream.Dispose();
 
-            (string Name, string Url) blobTuple = new ValueTuple<string, string>(blockBlob.Name.Substring(blockBlob.Name.IndexOf("/") + 1), blockBlob.Uri.ToString());
+            (string Name, string Url) blobTuple = (blockBlob.Name.Substring(blockBlob.Name.IndexOf("/") + 1), blockBlob.Uri.ToString());
 
             return blobTuple;
+        }
+
+        private CloudBlobContainer GetContainer()
+        {
+            StorageCredentials storageCredentials = new StorageCredentials(_configuration.Value.GuldName, _configuration.Value.GuldKey);
+            CloudStorageAccount storageAccount = new CloudStorageAccount(storageCredentials, useHttps: true);
+            CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+            CloudBlobContainer container = blobClient.GetContainerReference("xrays");
+
+            return container;
         }
     }
 }

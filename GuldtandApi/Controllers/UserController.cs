@@ -14,13 +14,12 @@ using System.Security.Claims;
 using Guldtand.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace GuldtandApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -40,9 +39,8 @@ namespace GuldtandApi.Controllers
             _logger = logger;
         }
 
-        [HttpPost]
-        [Route("auth")]
         [AllowAnonymous]
+        [HttpPost("auth")]
         public async Task<IActionResult> Authenticate([FromBody]UserDTO userDto)
         {
             var user = await _userService.Authenticate(userDto.Username, userDto.Password);
@@ -76,11 +74,8 @@ namespace GuldtandApi.Controllers
             });
         }
 
-
-        [HttpPost]
-        [Route("reg")]
-        [Authorize(Roles = "Admin")]
-        public IActionResult Register([FromBody]UserDTO userDto)
+        [HttpPost("reg")]
+        public IActionResult Register([FromBody] UserDTO userDto)
         {
             var user = _mapper.Map<User>(userDto);
 
@@ -103,5 +98,36 @@ namespace GuldtandApi.Controllers
             return Ok(userDtos);
         }
 
+        [HttpGet("{id}")]
+        public IActionResult GetById(int id)
+        {
+            var user = _userService.GetById(id);
+            var userDto = _mapper.Map<UserDTO>(user);
+            return Ok(userDto);
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, [FromBody] UserDTO userDto)
+        {
+            var user = _mapper.Map<User>(userDto);
+            user.Id = id;
+
+            try
+            {
+                _userService.Update(user, userDto.Password);
+                return Ok();
+            }
+            catch (AppException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            _userService.Delete(id);
+            return Ok();
+        }
     }
 }

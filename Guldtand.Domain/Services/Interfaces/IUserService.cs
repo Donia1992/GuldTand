@@ -10,5 +10,7 @@ namespace Guldtand.Domain.Services
         User Create(User user, string password);
         User GetById(int id);
         IEnumerable<User> GetAll();
+        void Update(User userParam, string password = null);
+        void Delete(int id);
     }
 }

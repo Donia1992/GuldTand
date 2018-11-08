@@ -53,6 +53,7 @@ namespace GuldtandApi
 
             var appSettings = appSettingsSection.Get<AppSettings>();
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -69,7 +70,6 @@ namespace GuldtandApi
                         var user = userService.GetById(userId);
                         if (user == null)
                         {
-                            // return unauthorized if user no longer exists
                             context.Fail("Unauthorized");
                         }
                         return Task.CompletedTask;

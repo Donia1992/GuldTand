@@ -43,6 +43,9 @@ namespace Guldtand.Domain.Services
             if (_context.Users.Any(x => x.Username == user.Username))
                 throw new AppException("Username \"" + user.Username + "\" is already taken");
 
+            if (_context.Users.Any(x => x.Email == user.Email))
+                throw new AppException("Email \"" + user.Email + "\" is already taken");
+
             CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
 
             user.PasswordHash = passwordHash;
@@ -54,16 +57,54 @@ namespace Guldtand.Domain.Services
             return user;
         }
 
-        public User GetById(int id)
-        {
-            return _context.Users.Find(id);
-        }
-
         public IEnumerable<User> GetAll()
         {
             return _context.Users;
         }
 
+        public User GetById(int id)
+        {
+            return _context.Users.Find(id);
+        }
+
+        public void Update(User userParam, string password = null)
+        {
+            var user = _context.Users.Find(userParam.Id);
+
+            if (user == null)
+                throw new AppException("User not found");
+
+            if (userParam.Username != user.Username)
+            {
+                if (_context.Users.Any(x => x.Username == userParam.Username))
+                    throw new AppException("Username " + userParam.Username + " is already taken");
+            }
+
+            user.FirstName = userParam.FirstName;
+            user.LastName = userParam.LastName;
+            user.Username = userParam.Username;
+
+            if (!string.IsNullOrWhiteSpace(password))
+            {
+                CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
+
+                user.PasswordHash = passwordHash;
+                user.PasswordSalt = passwordSalt;
+            }
+
+            _context.Users.Update(user);
+            _context.SaveChanges();
+        }
+
+        public void Delete(int id)
+        {
+            var user = _context.Users.Find(id);
+            if (user != null)
+            {
+                _context.Users.Remove(user);
+                _context.SaveChanges();
+            }
+        }
 
         private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {

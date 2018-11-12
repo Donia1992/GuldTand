@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Guldtand.Data.Entities;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Guldtand.Data
@@ -33,14 +34,5 @@ namespace Guldtand.Data
 
         [Required]
         public virtual string Password { get; set; }
-    }
-
-    public class Role
-    {
-        [Key]
-        public int RoleId { get; set; }
-
-        [Required]
-        public string RoleName { get; set; }
     }
 }

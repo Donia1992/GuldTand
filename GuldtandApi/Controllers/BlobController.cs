@@ -32,6 +32,7 @@ namespace GuldtandApi.Controllers
             }
             catch (Exception exception)
             {
+                _logger.LogError($"Error caught in {nameof(BlobController)}, details: {exception.Message}");
                 return StatusCode((int)HttpStatusCode.InternalServerError, exception.Message);
             }
         }
@@ -53,10 +54,12 @@ namespace GuldtandApi.Controllers
             }
             catch (ArgumentNullException exception)
             {
+                _logger.LogError($"Error caught in {nameof(BlobController)}, details: {exception.Message}");
                 return StatusCode((int) HttpStatusCode.BadRequest, exception.Message);
             }
             catch (Exception exception)
             {
+                _logger.LogError($"Error caught in {nameof(BlobController)}, details: {exception.Message}");
                 return StatusCode((int) HttpStatusCode.InternalServerError, exception.Message);
             }
         }

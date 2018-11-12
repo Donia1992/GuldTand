@@ -14,6 +14,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Threading.Tasks;
+using GuldtandApi.Helpers;
 
 namespace GuldtandApi
 {
@@ -40,6 +41,8 @@ namespace GuldtandApi
             services.AddScoped<IBlobRepository, BlobRepository>();
 
             services.AddScoped<IUserService, UserService>();
+
+            services.AddScoped<IJWTHelper, JWTHelper>();
 
             services.Configure<BlobSettings>(Configuration.GetSection("BlobSettings"));
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));

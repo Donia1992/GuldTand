@@ -1,6 +1,6 @@
-﻿namespace Guldtand.Domain.Models.DTOs
+﻿namespace Guldtand.Domain.Models
 {
-    public class BlobDTO : IBlobDTO
+    public class BlobDTO
     {
         public string Name;
         public string Url;

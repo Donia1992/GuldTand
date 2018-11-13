@@ -5,6 +5,6 @@ namespace Guldtand.Domain.Repositories
 {
     public interface ICustomerRepository
     {
-        List<ICustomer> GetAllCustomers();
+        List<CustomerDTO> GetAllCustomers();
     }
 }

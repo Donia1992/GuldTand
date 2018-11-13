@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using Guldtand.Domain.Models.DTOs;
+using Guldtand.Domain.Models;
 
 namespace Guldtand.Domain.Services
 {

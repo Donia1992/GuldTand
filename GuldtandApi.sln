@@ -7,15 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GuldtandApi", "GuldtandApi\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{9945A115-BEC7-4F9A-A654-5845DA97FAE5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Guldtand.UnitTests", "Guldtand.UnitTests\Guldtand.UnitTests.csproj", "{74889B68-5C6B-48C3-A6F1-E0FD80A746DB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Guldtand.UnitTests", "Guldtand.UnitTests\Guldtand.UnitTests.csproj", "{74889B68-5C6B-48C3-A6F1-E0FD80A746DB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Guldtand.IntegrationTests", "Guldtand.IntegrationTests\Guldtand.IntegrationTests.csproj", "{1A340504-73B9-45D1-BBE4-6F7D9820D6F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Guldtand.IntegrationTests", "Guldtand.IntegrationTests\Guldtand.IntegrationTests.csproj", "{1A340504-73B9-45D1-BBE4-6F7D9820D6F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Guldtand.Domain", "Guldtand.Domain\Guldtand.Domain.csproj", "{8B67289F-7DEA-42C3-973C-C5A081AB7F24}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Guldtand.Domain", "Guldtand.Domain\Guldtand.Domain.csproj", "{8B67289F-7DEA-42C3-973C-C5A081AB7F24}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Guldtand.Data", "Guldtand.Data\Guldtand.Data.csproj", "{0A263D39-53B8-4872-9983-A842451B9BE9}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Guldtand.Infrastructure", "Guldtand.Infrastructure\Guldtand.Infrastructure.csproj", "{4A99B53B-5262-4683-BBCD-7E96B9B3E8A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Guldtand.Data", "Guldtand.Data\Guldtand.Data.csproj", "{0A263D39-53B8-4872-9983-A842451B9BE9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,10 +41,6 @@ Global
 		{0A263D39-53B8-4872-9983-A842451B9BE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A263D39-53B8-4872-9983-A842451B9BE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A263D39-53B8-4872-9983-A842451B9BE9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4A99B53B-5262-4683-BBCD-7E96B9B3E8A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4A99B53B-5262-4683-BBCD-7E96B9B3E8A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4A99B53B-5262-4683-BBCD-7E96B9B3E8A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4A99B53B-5262-4683-BBCD-7E96B9B3E8A8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

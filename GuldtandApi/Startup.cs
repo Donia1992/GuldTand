@@ -30,12 +30,10 @@ namespace GuldtandApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("AzureGuldtand"), sqlServerOptionsAction: x => x.MigrationsAssembly("Guldtand.Data")));
+            services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("AzureGuldtand")));
 
             services.AddScoped<ICustomerRepository, CustomerRepository>();
-
-            services.AddScoped<IEmployeeService, EmployeeService>();
-            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            services.AddScoped<ICustomerService, CustomerService>();
 
             services.AddScoped<IBlobService, BlobService>();
             services.AddScoped<IBlobRepository, BlobRepository>();

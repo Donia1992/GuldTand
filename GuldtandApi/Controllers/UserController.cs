@@ -1,14 +1,11 @@
 ﻿using System.Threading.Tasks;
 using Guldtand.Domain.Helpers;
 using Guldtand.Domain.Services;
-using Guldtand.Domain.Models.DTOs;
+using Guldtand.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using AutoMapper;
 using Microsoft.Extensions.Options;
-using Guldtand.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
-using System.Collections.Generic;
 using GuldtandApi.Helpers;
 
 namespace GuldtandApi.Controllers
@@ -19,20 +16,17 @@ namespace GuldtandApi.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-        private readonly IMapper _mapper;
         private readonly IOptions<AppSettings> _appSettings;
         private readonly ILogger<UserController> _logger;
         private readonly IJWTHelper _jwtHelper;
 
         public UserController(
             IUserService userService,
-            IMapper mapper,
             IOptions<AppSettings> appSettings,
             ILogger<UserController> logger,
             IJWTHelper jwtHelper)
         {
             _userService = userService;
-            _mapper = mapper;
             _appSettings = appSettings;
             _logger = logger;
             _jwtHelper = jwtHelper;
@@ -40,19 +34,19 @@ namespace GuldtandApi.Controllers
 
         [AllowAnonymous]
         [HttpPost("auth")]
-        public async Task<IActionResult> Authenticate([FromBody]UserDTO userDto)
+        public async Task<IActionResult> AuthenticatAsync([FromBody] UserDTO userDto)
         {
-            var user = await _userService.Authenticate(userDto.Username, userDto.Password);
+            (var user, var roleName) = await _userService.AuthenticateAsync(userDto.Username, userDto.Password);
 
             if (user == null)
                 return BadRequest(new { message = "Username or password is incorrect" });
 
-            var tokenString = _jwtHelper.GenerateTokenString(user, _appSettings);
+            var tokenString = _jwtHelper.GenerateTokenString(user, roleName, _appSettings);
 
             return Ok(new
             {
                 user.Username,
-                user.Role.RoleName,
+                roleName,
                 user.FirstName,
                 user.LastName,
                 Token = tokenString
@@ -60,13 +54,11 @@ namespace GuldtandApi.Controllers
         }
 
         [HttpPost("reg")]
-        public IActionResult Register([FromBody] UserDTO userDto)
+        public async Task<IActionResult> Register([FromBody] UserDTO userDto)
         {
-            var user = _mapper.Map<User>(userDto);
-
             try
             { 
-                _userService.Create(user, userDto.Password);
+                await _userService.CreateAsync(userDto, userDto.Password);
                 return Ok();
             }
             catch (AppException ex)
@@ -80,27 +72,25 @@ namespace GuldtandApi.Controllers
         public IActionResult GetAll()
         {
             var users = _userService.GetAll();
-            var userDtos = _mapper.Map<IList<UserDTO>>(users);
-            return Ok(userDtos);
+            return Ok(users);
         }
 
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
             var user = _userService.GetById(id);
-            var userDto = _mapper.Map<UserDTO>(user);
-            return Ok(userDto);
+            return Ok(user);
         }
 
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] UserDTO userDto)
         {
-            var user = _mapper.Map<User>(userDto);
-            user.Id = id;
+            
+            userDto.Id = id;
 
             try
             {
-                _userService.Update(user, userDto.Password);
+                _userService.Update(userDto);
                 return Ok();
             }
             catch (AppException ex)

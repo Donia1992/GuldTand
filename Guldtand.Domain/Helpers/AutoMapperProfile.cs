@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Guldtand.Data.Entities;
-using Guldtand.Domain.Models.DTOs;
+using Guldtand.Domain.Models;
 
 namespace Guldtand.Domain.Helpers
 {
@@ -10,6 +10,8 @@ namespace Guldtand.Domain.Helpers
         {
             CreateMap<User, UserDTO>();
             CreateMap<UserDTO, User>();
+            CreateMap<Customer, CustomerDTO>();
+            CreateMap<CustomerDTO, Customer>();
         }
     }
 }

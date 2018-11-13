@@ -1,5 +1,5 @@
-﻿using Guldtand.Data.Entities;
-using Guldtand.Domain.Helpers;
+﻿using Guldtand.Domain.Helpers;
+using Guldtand.Domain.Models;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -11,7 +11,7 @@ namespace GuldtandApi.Helpers
 {
     public class JWTHelper : IJWTHelper
     {
-        public string GenerateTokenString(User user, IOptions<AppSettings> _appSettings)
+        public string GenerateTokenString(UserDTO user, string roleName, IOptions<AppSettings> _appSettings)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Value.Secret);
@@ -21,7 +21,7 @@ namespace GuldtandApi.Helpers
                 {
                     new Claim(ClaimTypes.Name, user.Id.ToString()),
                     new Claim(ClaimTypes.NameIdentifier, user.Username),
-                    new Claim(ClaimTypes.Role, user.Role.RoleName)
+                    new Claim(ClaimTypes.Role, roleName)
                 }),
                 Expires = DateTime.UtcNow.AddDays(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

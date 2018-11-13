@@ -3,13 +3,13 @@ using FakeItEasy;
 using Guldtand.Data.Entities;
 using Guldtand.Domain.Helpers;
 using Guldtand.Domain.Models;
-using Guldtand.Domain.Models.DTOs;
 using Guldtand.Domain.Services;
 using GuldtandApi.Controllers;
 using GuldtandApi.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using Xunit;
@@ -36,15 +36,16 @@ namespace Guldtand.UnitTests
 
             var fakeUserName = "";
             var fakePassword = "";
+            var fakeRole = "";
             var fakeToken = "";
 
-            A.CallTo(() => fakeService.Authenticate(fakeUserName, fakePassword)).Returns(fakeUser);
-            A.CallTo(() => fakeJWTHelper.GenerateTokenString(fakeUser, fakeSettings)).Returns(fakeToken);
+            A.CallTo(() => fakeService.AuthenticateAsync(fakeUserName, fakePassword)).Returns((fakeUserDTO, fakeRole));
+            A.CallTo(() => fakeJWTHelper.GenerateTokenString(fakeUserDTO, fakeRole, fakeSettings)).Returns(fakeToken);
 
-            var sut = new UserController(fakeService, fakeMapper, fakeSettings, fakeLogger, fakeJWTHelper);
+            var sut = new UserController(fakeService, fakeSettings, fakeLogger, fakeJWTHelper);
 
             //Act
-            var result = await sut.Authenticate(fakeUserDTO) as OkObjectResult;
+            var result = await sut.AuthenticatAsync(fakeUserDTO) as OkObjectResult;
 
             //Assert
             Assert.Equal(expectedType, result.GetType());

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Guldtand.Data
+namespace Guldtand.Data.Entities
 {
     public class Customer
     {
@@ -19,11 +19,23 @@ namespace Guldtand.Data
 
         [Required]
         [StringLength(12, MinimumLength = 12)]
-        public virtual string PersonalNumber { get; set; }
+        public virtual string PIDNumber { get; set; }
 
         [Required]
         [Phone]
-        public virtual string PhoneNumber { get; set; }
+        public virtual string Phone { get; set; }
+
+        [Required]
+        public virtual string Email { get; set; }
+
+        [Required]
+        public virtual string Street { get; set; }
+
+        [Required]
+        public virtual string Zip { get; set; }
+
+        [Required]
+        public virtual string City { get; set; }
 
         [Required]
         public virtual bool HasInsurance { get; set; }

@@ -1,4 +1,4 @@
-﻿using Guldtand.Domain.Models.DTOs;
+﻿using Guldtand.Domain.Models;
 using Guldtand.Domain.Repositories;
 using System.Collections.Generic;
 using System.IO;

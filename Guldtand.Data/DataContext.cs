@@ -10,5 +10,6 @@ namespace Guldtand.Data
 
         public DbSet<Customer> Customers { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Role> Roles { get; set; }
     }
 }

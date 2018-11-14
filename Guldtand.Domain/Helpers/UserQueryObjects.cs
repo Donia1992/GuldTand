@@ -10,6 +10,5 @@ namespace Guldtand.Domain.Helpers
             return @this.Skip(n * (pageNr - 1)).Take(n);
         }
     }
-
 }
 

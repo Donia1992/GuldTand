@@ -41,6 +41,7 @@ namespace GuldtandApi
             services.AddScoped<IUserService, UserService>();
 
             services.AddScoped<IJWTHelper, JWTHelper>();
+            services.AddScoped<IDateTimeProvider, DateTimeProvider>();
 
             services.Configure<BlobSettings>(Configuration.GetSection("BlobSettings"));
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));

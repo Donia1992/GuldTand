@@ -1,21 +1,13 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
-using System.Text.RegularExpressions;
+﻿using System.Linq;
 
 namespace Guldtand.Domain.Helpers
 {
     public static class PIDVerification
     {
+
         public static bool LuhnCheck(this string pid)
-        {
-            string pidString = Regex.Replace(pid, @"\s|\-", "");
-
-            if (pidString.Length == 12) { pidString = pidString.Substring(2); }
-            if (pidString.Length != 10) { return false; }
-            if (!DateTime.TryParseExact(pidString.Substring(0, 6), "yyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime temp)) { return false; }
-
-            return LuhnCheck(pidString.Select(c => c - '0').ToArray());
+        { 
+            return LuhnCheck(pid.Select(c => c - '0').ToArray());
         }
 
         private static bool LuhnCheck(this int[] digits)

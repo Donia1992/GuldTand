@@ -2,7 +2,6 @@ using System;
 using Microsoft.AspNetCore.Mvc;
 using Guldtand.Domain.Repositories;
 using System.Net;
-using Microsoft.Extensions.Options;
 using Guldtand.Domain.Helpers;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
@@ -36,12 +35,17 @@ namespace GuldtandApi.Controllers
         {
             try
             {
-                await Task.Run(() => _customerService.RegisterAsync(customerDto));
+                await _customerService.RegisterAsync(customerDto);
                 return Ok();
             }
             catch (AppException ex)
             {
                 _logger.LogError($"Error caught in {nameof(CustomerController)}, details: {ex.Message}");
+                return BadRequest(new { message = ex.Message });
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError($"Unhandled error in {nameof(CustomerService)}, details: {ex.InnerException.Message}");
                 return BadRequest(new { message = ex.Message });
             }
         }

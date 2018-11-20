@@ -127,13 +127,34 @@ namespace Guldtand.Domain.Services
 
         private IEnumerable<ActivityDTO> GetAllForCustomerAndUser(string customerId, string userId)
         {
-            if (int.TryParse(customerId, out int parsedCustomerId) && int.TryParse(userId, out int parsedUserId))
+            var couldParseCustomerId = int.TryParse(customerId, out int parsedCustomerId);
+            var couldParseUserId = int.TryParse(userId, out int parsedUserId);
+
+            if (couldParseCustomerId && couldParseCustomerId)
             {
-                var activities = _context.Activities.CustomerMatch(parsedCustomerId).user;
+                var activities = _context.Activities.UserMatch(parsedUserId).CustomerMatch(parsedCustomerId);
                 return _mapper.Map<IEnumerable<ActivityDTO>>(activities);
             }
+            else
+            {
+                throw new ArgumentException($"CustomerId: {customerId} or UserId: {userId} could not be parsed to int.");
+            }            
+        }
 
-            
+        private IEnumerable<ActivityDTO> GetAllForCustomerAndUserFuture(string customerId, string userId)
+        {
+            var couldParseCustomerId = int.TryParse(customerId, out int parsedCustomerId);
+            var couldParseUserId = int.TryParse(userId, out int parsedUserId);
+
+            if (couldParseCustomerId && couldParseCustomerId)
+            {
+                var activities = _context.Activities.UserMatch(parsedUserId).CustomerMatch(parsedCustomerId).AsOf(_dateTime.Today());
+                return _mapper.Map<IEnumerable<ActivityDTO>>(activities);
+            }
+            else
+            {
+                throw new ArgumentException($"CustomerId: {customerId} or UserId: {userId} could not be parsed to int.");
+            }
         }
 
         private IEnumerable<ActivityDTO> GetAllForCustomer(int customerId)

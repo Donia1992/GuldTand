@@ -40,8 +40,11 @@ namespace GuldtandApi
 
             services.AddScoped<IUserService, UserService>();
 
+            services.AddScoped<IActivityService, ActivityService>();
+
             services.AddScoped<IJWTHelper, JWTHelper>();
             services.AddScoped<IDateTimeProvider, DateTimeProvider>();
+            services.AddSingleton<IPIDValidator, PIDValidator>();
 
             services.Configure<BlobSettings>(Configuration.GetSection("BlobSettings"));
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
@@ -109,6 +112,8 @@ namespace GuldtandApi
                 .AllowAnyHeader()
                 .AllowAnyMethod()
              );
+
+            app.UseGuldtandTimer();
 
             app.UseHttpsRedirection();
             app.UseAuthentication();

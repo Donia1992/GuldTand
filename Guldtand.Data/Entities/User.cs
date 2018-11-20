@@ -29,16 +29,25 @@ namespace Guldtand.Data.Entities
 
         [Required]
         [EmailAddress]
-        public virtual string Email { get; set; }
+        public string Email { get; set; }
 
         [Required]
         [Phone]
-        public virtual string PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; }
 
         [Required]
         public byte[] PasswordHash { get; set; }
 
         [Required]
         public byte[] PasswordSalt { get; set; }
+    }
+
+    public class Role
+    {
+        [Key]
+        public int Id { get; set; }
+
+        [Required]
+        public string RoleName { get; set; }
     }
 }

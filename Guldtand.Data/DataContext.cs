@@ -8,8 +8,11 @@ namespace Guldtand.Data
         public DataContext(DbContextOptions options) : base(options)
         { }
 
-        public DbSet<Customer> Customers { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Activity> Activities { get; set; }
+        public DbSet<ActivityType> ActivityTypes { get; set; }
+        public DbSet<Xray> Xrays { get; set; }
     }
 }

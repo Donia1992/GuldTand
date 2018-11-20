@@ -7,21 +7,23 @@ using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using Guldtand.Domain.Services;
 using Guldtand.Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GuldtandApi.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
-    public class CustomerController : ControllerBase
+    [Route("api/[controller]")]
+    [Authorize(Roles = "Admin,Dentist,Receptionist")]
+    public class CustomersController : ControllerBase
     {
         private readonly ICustomerRepository _customerRepository;
         private readonly ICustomerService _customerService;
-        private readonly ILogger<CustomerController> _logger;
+        private readonly ILogger<CustomersController> _logger;
 
-        public CustomerController(
+        public CustomersController(
             ICustomerRepository customerRepository,
             ICustomerService customerService,
-            ILogger<CustomerController> logger
+            ILogger<CustomersController> logger
             )
         {
             _customerRepository = customerRepository;
@@ -30,17 +32,17 @@ namespace GuldtandApi.Controllers
 
         }
 
-        [HttpPost("reg")]
-        public async Task<IActionResult> Register([FromBody] CustomerDTO customerDto)
+        [HttpPost]
+        public IActionResult Register([FromBody] CustomerDTO customerDto)
         {
             try
             {
-                await _customerService.RegisterAsync(customerDto);
+                _customerService.Create(customerDto);
                 return Ok();
             }
             catch (AppException ex)
             {
-                _logger.LogError($"Error caught in {nameof(CustomerController)}, details: {ex.Message}");
+                _logger.LogError($"Error caught in {nameof(CustomersController)}, details: {ex.Message}");
                 return BadRequest(new { message = ex.Message });
             }
             catch(Exception ex)
@@ -76,7 +78,7 @@ namespace GuldtandApi.Controllers
             }
             catch (AppException ex)
             {
-                _logger.LogError($"Error caught in {nameof(CustomerController)}, details: {ex.Message}");
+                _logger.LogError($"Error caught in {nameof(CustomersController)}, details: {ex.Message}");
                 return BadRequest(new { message = ex.Message });
             }
         }
@@ -89,6 +91,7 @@ namespace GuldtandApi.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         [Route("/old/dummyCustomerData")]
         public IActionResult GetAllCustomers()
         {

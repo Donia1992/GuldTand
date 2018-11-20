@@ -4,7 +4,6 @@ using System;
 using System.Text;
 using Guldtand.Data;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
@@ -23,29 +22,29 @@ namespace Guldtand.Domain.Services
             _mapper = mapper;
         }
 
-        public async Task<(UserDTO, string)> AuthenticateAsync(string username, string password)
+        public (UserDTO user, string role) Authenticate(string username, string password)
         {
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
-                throw new AppException("Username and password required.");
+                throw new ArgumentException("Username and password required.");
 
-            var user = await _context.Users.Include("Role").SingleOrDefaultAsync(x => x.Username == username);
+            var user = _context.Users.Include("Role").SingleOrDefault(x => x.Username == username);
 
             if (user == null)
-                throw new AppException("Username or password incorrect.");
+                throw new ArgumentException("Username or password incorrect.");
 
             if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
-                throw new AppException("Username or password incorrect.");
+                throw new ArgumentException("Username or password incorrect.");
 
             var userDto = _mapper.Map<UserDTO>(user);
             return (userDto, user.Role.RoleName);
         }
 
-        public async Task<UserDTO> CreateAsync(UserDTO userDto, string password)
+        public UserDTO Create(UserDTO userDto, string password)
         {
             var user = _mapper.Map<User>(userDto);
 
             if (string.IsNullOrWhiteSpace(password))
-                throw new AppException("Password is required.");
+                throw new ArgumentException("Password is required.");
 
             if (_context.Users.Any(x => x.Username == user.Username))
                 throw new AppException($"Username \"{user.Username}\" is already taken");
@@ -58,8 +57,8 @@ namespace Guldtand.Domain.Services
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
 
-            await _context.Users.AddAsync(user);
-            await _context.SaveChangesAsync();
+            _context.Users.Add(user);
+            _context.SaveChanges();
 
             return _mapper.Map<UserDTO>(user);
         }

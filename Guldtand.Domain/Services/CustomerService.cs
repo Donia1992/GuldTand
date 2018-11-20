@@ -6,7 +6,6 @@ using Guldtand.Domain.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Guldtand.Domain.Services
 {
@@ -15,22 +14,24 @@ namespace Guldtand.Domain.Services
         private readonly DataContext _context;
         private readonly IMapper _mapper;
         private readonly IDateTimeProvider _dateTime;
+        private readonly IPIDValidator _pid;
 
-        public CustomerService(DataContext context, IMapper mapper, IDateTimeProvider dateTime)
+        public CustomerService(DataContext context, IMapper mapper, IDateTimeProvider dateTime, IPIDValidator pid)
         {
             _context = context;
             _mapper = mapper;
             _dateTime = dateTime;
+            _pid = pid;
         }
 
-        public async Task<CustomerDTO> RegisterAsync(CustomerDTO customerDto)
+        public CustomerDTO Create(CustomerDTO customerDto)
         {
             if (!Regex.Match(customerDto.PIDNumber, @"^\d{12}$").Success)
-                throw new AppException($"PID format {customerDto.PIDNumber} is invalid.\nMust be 12 characters long.");
+                throw new AppException($"PID format {customerDto.PIDNumber} is invalid. Must be 12 characters long.");
 
             string pidString = customerDto.PIDNumber.Substring(2);
 
-            if (!_dateTime.IsValidDate(pidString) || !PIDVerification.LuhnCheck(pidString))
+            if (!_dateTime.IsValidDate(pidString) || _pid.Validate(pidString))
                 throw new AppException($"PID number {customerDto.PIDNumber} is invalid.");
             
             if (_context.Customers.Any(x => x.PIDNumber == customerDto.PIDNumber))
@@ -41,8 +42,8 @@ namespace Guldtand.Domain.Services
 
             var customer = _mapper.Map<Customer>(customerDto);
 
-            await _context.Customers.AddAsync(customer);
-            await _context.SaveChangesAsync();
+            _context.Customers.Add(customer);
+            _context.SaveChanges();
 
             return customerDto;
         }

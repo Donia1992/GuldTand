@@ -11,33 +11,33 @@ namespace Guldtand.Data.Entities
 
         [Required]
         [StringLength(15, MinimumLength = 2)]
-        public virtual string FirstName { get; set; }
+        public string FirstName { get; set; }
 
         [Required]
         [StringLength(15, MinimumLength = 2)]
-        public virtual string LastName { get; set; }
+        public string LastName { get; set; }
 
         [Required]
         [StringLength(12, MinimumLength = 12)]
-        public virtual string PIDNumber { get; set; }
+        public string PIDNumber { get; set; }
 
         [Required]
         [Phone]
-        public virtual string Phone { get; set; }
+        public string Phone { get; set; }
 
         [Required]
-        public virtual string Email { get; set; }
+        public string Email { get; set; }
 
         [Required]
-        public virtual string Street { get; set; }
+        public string Street { get; set; }
 
         [Required]
-        public virtual string Zip { get; set; }
+        public string Zip { get; set; }
 
         [Required]
-        public virtual string City { get; set; }
+        public string City { get; set; }
 
         [Required]
-        public virtual bool HasInsurance { get; set; }
+        public bool HasInsurance { get; set; }
     }
 }

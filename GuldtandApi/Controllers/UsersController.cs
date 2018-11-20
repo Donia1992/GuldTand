@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Guldtand.Domain.Helpers;
+﻿using Guldtand.Domain.Helpers;
 using Guldtand.Domain.Services;
 using Guldtand.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -13,17 +12,17 @@ namespace GuldtandApi.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize(Roles = "Admin")]
-    public class UserController : ControllerBase
+    public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
         private readonly IOptions<AppSettings> _appSettings;
-        private readonly ILogger<UserController> _logger;
+        private readonly ILogger<UsersController> _logger;
         private readonly IJWTHelper _jwtHelper;
 
-        public UserController(
+        public UsersController(
             IUserService userService,
             IOptions<AppSettings> appSettings,
-            ILogger<UserController> logger,
+            ILogger<UsersController> logger,
             IJWTHelper jwtHelper)
         {
             _userService = userService;
@@ -34,14 +33,14 @@ namespace GuldtandApi.Controllers
 
         [AllowAnonymous]
         [HttpPost("auth")]
-        public async Task<IActionResult> AuthenticatAsync([FromBody] UserDTO userDto)
+        public IActionResult Authenticate([FromBody] UserDTO userDto)
         {
-            (var user, var roleName) = await _userService.AuthenticateAsync(userDto.Username, userDto.Password);
+            (var user, var roleName) = _userService.Authenticate(userDto.Username, userDto.Password);
 
             if (user == null)
                 return BadRequest(new { message = "Username or password is incorrect" });
 
-            var tokenString = _jwtHelper.GenerateTokenString(user, roleName, _appSettings);
+            var token = _jwtHelper.GenerateTokenString(user, roleName, _appSettings);
 
             return Ok(new
             {
@@ -49,21 +48,21 @@ namespace GuldtandApi.Controllers
                 roleName,
                 user.FirstName,
                 user.LastName,
-                Token = tokenString
+                token
             });
         }
 
-        [HttpPost("reg")]
-        public async Task<IActionResult> Register([FromBody] UserDTO userDto)
+        [HttpPost]
+        public IActionResult Register([FromBody] UserDTO userDto)
         {
             try
             { 
-                await _userService.CreateAsync(userDto, userDto.Password);
+                _userService.Create(userDto, userDto.Password);
                 return Ok();
             }
             catch (AppException ex)
             {
-                _logger.LogError($"Error caught in {nameof(UserController)}, details: {ex.Message}");
+                _logger.LogError($"Error caught in {nameof(UsersController)}, details: {ex.Message}");
                 return BadRequest(new { message = ex.Message });
             }
         }
@@ -95,7 +94,7 @@ namespace GuldtandApi.Controllers
             }
             catch (AppException ex)
             {
-                _logger.LogError($"Error caught in {nameof(UserController)}, details: {ex.Message}");
+                _logger.LogError($"Error caught in {nameof(UsersController)}, details: {ex.Message}");
                 return BadRequest(new { message = ex.Message });
             }
         }

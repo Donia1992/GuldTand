@@ -16,10 +16,10 @@ using Xunit;
 
 namespace Guldtand.UnitTests
 {
-    public class UserControllerTests
+    public class UsersControllerTests
     {
         [Fact]
-        public async void Authenticate_ServiceReturnAUser_AuthenticateReturnsAnOkObjectResult()
+        public void Authenticate_ServiceReturnAUser_AuthenticateReturnsAnOkObjectResult()
         {
             //Arrange
             var expectedType = typeof(OkObjectResult);
@@ -28,7 +28,7 @@ namespace Guldtand.UnitTests
             var fakeService = A.Fake<IUserService>();
             var fakeMapper = A.Fake<IMapper>();
             var fakeSettings = A.Fake<IOptions<AppSettings>>();
-            var fakeLogger = A.Fake<ILogger<UserController>>();
+            var fakeLogger = A.Fake<ILogger<UsersController>>();
             var fakeJWTHelper = A.Fake<IJWTHelper>();
 
             var fakeUser = A.Fake<User>();
@@ -39,13 +39,13 @@ namespace Guldtand.UnitTests
             var fakeRole = "";
             var fakeToken = "";
 
-            A.CallTo(() => fakeService.AuthenticateAsync(fakeUserName, fakePassword)).Returns((fakeUserDTO, fakeRole));
+            A.CallTo(() => fakeService.Authenticate(fakeUserName, fakePassword)).Returns((fakeUserDTO, fakeRole));
             A.CallTo(() => fakeJWTHelper.GenerateTokenString(fakeUserDTO, fakeRole, fakeSettings)).Returns(fakeToken);
 
-            var sut = new UserController(fakeService, fakeSettings, fakeLogger, fakeJWTHelper);
+            var sut = new UsersController(fakeService, fakeSettings, fakeLogger, fakeJWTHelper);
 
             //Act
-            var result = await sut.AuthenticatAsync(fakeUserDTO) as OkObjectResult;
+            var result = sut.Authenticate(fakeUserDTO) as OkObjectResult;
 
             //Assert
             Assert.Equal(expectedType, result.GetType());

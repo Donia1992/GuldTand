@@ -12,6 +12,8 @@ namespace Guldtand.Domain.Helpers
             CreateMap<UserDTO, User>();
             CreateMap<Customer, CustomerDTO>();
             CreateMap<CustomerDTO, Customer>();
+            CreateMap<Activity, ActivityDTO>();
+            CreateMap<ActivityDTO, Activity>();
         }
     }
 }

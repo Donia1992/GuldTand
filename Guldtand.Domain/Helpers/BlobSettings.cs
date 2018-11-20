@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Guldtand.Domain
+﻿namespace Guldtand.Domain
 {
     public class BlobSettings
     {

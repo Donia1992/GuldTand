@@ -2,15 +2,14 @@
 
 namespace Guldtand.Domain.Helpers
 {
-    public static class PIDVerification
+    public class PIDValidator : IPIDValidator
     {
-
-        public static bool LuhnCheck(this string pid)
-        { 
+        public bool Validate(string pid)
+        {
             return LuhnCheck(pid.Select(c => c - '0').ToArray());
         }
 
-        private static bool LuhnCheck(this int[] digits)
+        private static bool LuhnCheck(int[] digits)
         {
             return GetCheckValue(digits) == 0;
         }

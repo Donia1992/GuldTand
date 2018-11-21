@@ -13,7 +13,7 @@ namespace GuldtandApi.Middlewares
         public static IApplicationBuilder UseGuldtandLogger(
             this IApplicationBuilder builder)
         {
-            return builder.UseMiddleware<GuldtandTimingMiddleware>();
+            return builder.UseMiddleware<GuldtandLoggingMiddleware>();
         }
     }
 

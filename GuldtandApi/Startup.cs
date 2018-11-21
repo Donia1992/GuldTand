@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Threading.Tasks;
 using GuldtandApi.Helpers;
+using GuldtandApi.Middlewares;
 
 namespace GuldtandApi
 {
@@ -113,6 +114,7 @@ namespace GuldtandApi
                 .AllowAnyMethod()
              );
 
+            app.UseGuldtandLogger();
             app.UseGuldtandTimer();
 
             app.UseHttpsRedirection();

@@ -41,6 +41,7 @@ namespace GuldtandApi.Controllers
                 return BadRequest(new { message = "Username or password is incorrect" });
 
             var token = _jwtHelper.GenerateTokenString(user, roleName, _appSettings);
+            Request.HttpContext.Response.Headers.Add("X-Guldtand-Token", token);
 
             return Ok(new
             {
@@ -48,7 +49,6 @@ namespace GuldtandApi.Controllers
                 roleName,
                 user.FirstName,
                 user.LastName,
-                token
             });
         }
 

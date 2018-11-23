@@ -5,9 +5,9 @@ namespace Guldtand.Domain.Helpers
 {
     public class DateTimeProvider : IDateTimeProvider
     {
-        public bool IsValidDate(string pid)
+        public bool IsValidDate(string date)
         {
-            return DateTime.TryParseExact(pid.Substring(0, 6), "yyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime temp);
+            return DateTime.TryParseExact(date.Substring(0, 6), "yyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime temp);
         }
 
         public DateTime Today()

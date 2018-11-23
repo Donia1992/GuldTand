@@ -114,7 +114,7 @@ namespace GuldtandApi
                 .AllowAnyMethod()
              );
 
-            app.UseGuldtandLogger();
+            //app.UseGuldtandLogger();
             app.UseGuldtandTimer();
 
             app.UseHttpsRedirection();

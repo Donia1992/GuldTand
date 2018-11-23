@@ -13,12 +13,12 @@ namespace Guldtand.Domain.Helpers
 
         public static IQueryable<Activity> UserMatch(this IQueryable<Activity> @this, int id)
         {
-            return @this.Where(x => x.UserId == id);
+            return @this.Where(x => id == 0 || x.UserId == id);
         }
 
         public static IQueryable<Activity> CustomerMatch(this IQueryable<Activity> @this, int id)
         {
-            return @this.Where(x => x.CustomerId > id);
+            return @this.Where(x => id == 0 || x.CustomerId == id);
         }
     }
 }

@@ -4,7 +4,6 @@ using Guldtand.Domain.Repositories;
 using System.Net;
 using Guldtand.Domain.Helpers;
 using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
 using Guldtand.Domain.Services;
 using Guldtand.Domain.Models;
 using Microsoft.AspNetCore.Authorization;

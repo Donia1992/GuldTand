@@ -14,9 +14,7 @@ namespace Guldtand.Domain.Helpers
             return GetCheckValue(digits) == 0;
         }
 
-        private static int GetCheckValue(int[] digits)
-        {
-            return digits.Select((d, i) => i % 2 == digits.Length % 2 ? ((2 * d) % 10) + d / 5 : d).Sum() % 10;
-        }
+        private static int GetCheckValue(int[] digits) => 
+            digits.Select((d, i) => i % 2 == digits.Length % 2 ? ((2 * d) % 10) + d / 5 : d).Sum() % 10;
     }
 }

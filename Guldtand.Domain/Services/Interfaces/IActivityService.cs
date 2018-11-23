@@ -7,8 +7,8 @@ namespace Guldtand.Domain.Services
     {
         ActivityDTO Create(ActivityDTO activityDto);
         void Delete(int id);
-        IEnumerable<ActivityDTO> GetAll(string customerId, string userId);
-        IEnumerable<ActivityDTO> GetAllFuture(string customerId, string userId);
+        IEnumerable<ActivityDTO> GetAll(int customerId, int userId);
+        IEnumerable<ActivityDTO> GetAllFuture(int customerId, int userId);
         ActivityDTO GetById(int id);
         void Update(ActivityDTO activityDto, string password = null);
     }

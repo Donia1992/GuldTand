@@ -40,14 +40,14 @@ namespace GuldtandApi.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll([FromQuery(Name = "customerId")] string customerId, [FromQuery(Name = "userId")] string userId)
+        public IActionResult GetAll([FromQuery(Name = "customerId")] int customerId, [FromQuery(Name = "userId")] int userId)
         {
             try
             {
                 var activities = _activityService.GetAll(customerId, userId);
                 return Ok(activities);
             }
-            catch (ArgumentException ex)
+            catch (Exception ex)
             {
                 _logger.LogError($"Error caught in {nameof(ActivitiesController)}, details: {ex.Message}");
                 return BadRequest(new { message = ex.Message });
@@ -55,17 +55,14 @@ namespace GuldtandApi.Controllers
         }
 
         [HttpGet("future")]
-        public IActionResult GetAllFuture([FromQuery(Name = "customerId")] string customerId, [FromQuery(Name = "userId")] string userId)
+        public IActionResult GetAllFuture([FromQuery(Name = "customerId")] int customerId, [FromQuery(Name = "userId")] int userId)
         {
             try
             {
-                if (!string.IsNullOrEmpty(customerId) && !string.IsNullOrEmpty(userId))
-                    return BadRequest("Don't use both!");
-
                 var activities = _activityService.GetAllFuture(customerId, userId);
                 return Ok(activities);
             }
-            catch (AppException ex)
+            catch (Exception ex)
             {
                 _logger.LogError($"Error caught in {nameof(ActivitiesController)}, details: {ex.Message}");
                 return BadRequest(new { message = ex.Message });

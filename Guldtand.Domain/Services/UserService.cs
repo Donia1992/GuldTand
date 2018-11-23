@@ -47,10 +47,10 @@ namespace Guldtand.Domain.Services
                 throw new ArgumentException("Password is required.");
 
             if (_context.Users.Any(x => x.Username == user.Username))
-                throw new AppException($"Username \"{user.Username}\" is already taken");
+                throw new AppException($"Username: {user.Username} is already taken");
 
             if (_context.Users.Any(x => x.Email == user.Email))
-                throw new AppException($"Email \"{user.Email}\" is already taken");
+                throw new AppException($"Email: {user.Email} is already taken");
 
             CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
 
